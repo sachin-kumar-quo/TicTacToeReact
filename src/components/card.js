@@ -6,13 +6,13 @@ const Card = ({input}) =>{
     if(input !== "") {
         return (
             <div>
-                {input==='circle' ? <img src={circle} alt="circle" height="300px" width="270px"/> : <img src={cross} alt="cross" height="300px" width="270px"/>}
+                {input==='circle' ? <img src={circle} alt="circle" height="175px" width="175px"/> : <img src={cross} alt="cross" height="175px" width="175px"/>}
             </div>
         )
     }else{
         return (
             <div>
-                <img src={df} alt="default" height="300px" width="270px"/>
+                <img src={df} alt="default" height="175px" width="175px"/>
             </div>
         )
     }

@@ -5,7 +5,7 @@ import {useState,useEffect} from 'react';
 
 
 function App() {
-  const [crossTurn,setCrossTurn] = useState();
+  const [crossTurn,setCrossTurn] = useState(false);
   const [win,setWin] = useState("");
   const [filled,setFilled] = useState(false);
 
@@ -34,6 +34,12 @@ function App() {
       },4000);
     }
     console.log(array);
+  }
+
+  const resetGame = () => {
+    setArray(items);
+    setCrossTurn(false);
+    setWin("");
   }
 
   const isWin = () =>{
@@ -97,7 +103,7 @@ function App() {
   const filledMessage = () =>{
     if(filled){
       return (
-        <div className="border border-warning mb-3">
+        <div className="text-center border border-warning mb-3">
           <h2>Already filled, Try another place!!</h2>
         </div>
       )
@@ -106,7 +112,7 @@ function App() {
   const winMessage = () =>{
     if(win){
       return (
-        <div className="border border-success mb-3">
+        <div className="border border-success mb-3 text-center">
           <h2>{win}</h2>
         </div>
       )
@@ -114,23 +120,24 @@ function App() {
   }
 
   return (
-    <div className="mx-auto container">
+    <div className=" container">
       <div className="text-center">
         <h1>The Tic-Tac-Toe</h1>
       </div>
       {filledMessage()}
       {winMessage()}
-      <div className="mx-auto">
-        <div className="row">
+      <div className="d-flex justify-content-center">
+        <div className="row col-6">
           {items.map((item,index)=>{
             return (
-              <div className="col-4 border border-warning shadow" aria-disabled={win} onClick={()=>changeItem(index)} key={index} >
+              <div className="col-4 border border-warning shadow p-0" aria-disabled={win} onClick={()=>changeItem(index)} key={index} >
                 {createCard(array[index])}
               </div>
             )
           })} 
         </div>
       </div>
+      <button className="btn btn-success d-flex justify-content-center" onClick={resetGame}>Reset Game</button>
     </div>
   );
 }
