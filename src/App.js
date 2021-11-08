@@ -1,123 +1,82 @@
-import './App.css';
-import Card from './components/card'
-import {useState,useEffect} from 'react';
-
-
+import "./App.css";
+import Card from "./components/card";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [crossTurn,setCrossTurn] = useState(false);
-  const [win,setWin] = useState("");
-  const [filled,setFilled] = useState(false);
+  const [crossTurn, setCrossTurn] = useState(false);
+  const [win, setWin] = useState("");
+  const [filled, setFilled] = useState(false);
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
 
   const items = new Array(9).fill("");
-  const [array,setArray] = useState(items);
+  const [array, setArray] = useState(items);
 
-  useEffect(()=>{
-    isWin();
-  },[array,win,filled]);
+  useEffect(() => {
+    checkWin(!crossTurn);
+  }, [array]);
 
-
-  const changeItem = (itemNumber) =>{
-    console.log(win);
-    if(win){
+  const changeItem = (itemNumber) => {
+    if (win) {
       return;
     }
-    console.log(itemNumber);
-    if(array[itemNumber] === ""){
-      let data = crossTurn ? 'cross' : 'circle';
-      setArray({...array,[itemNumber]:data});
+    if (array[itemNumber] === "") {
+      let data = crossTurn ? "cross" : "circle";
+      setArray({ ...array, [itemNumber]: data });
       setCrossTurn(!crossTurn);
-    }else{
+    } else {
       setFilled(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         setFilled(false);
-      },4000);
+      }, 2000);
     }
-    console.log(array);
-  }
+  };
 
   const resetGame = () => {
     setArray(items);
     setCrossTurn(false);
     setWin("");
-  }
+  };
 
-  const isWin = () =>{
-    console.log("in iswin")
-     if(
-       array[0] === array[1] &&
-       array[0] === array[2] &&
-       array[0] !== ""
-       ){
-         setWin(`${array[0]} wins the game !! `);
-         console.log(win);
-       }else if(
-        array[3] === array[4] &&
-        array[4] === array[5] &&
-        array[3] !== ""
-       ){
-        setWin(`${array[3]} wins the game !! `);
-       }else if(
-        array[6] === array[7] &&
-        array[7] === array[8] &&
-        array[6] !== ""
-       ){
-        setWin(`${array[6]} wins the game !! `);
-       }else if(
-        array[0] === array[3] &&
-        array[3] === array[6] &&
-        array[0] !== ""
-       ){
-        setWin(`${array[0]} wins the game !! `);
-       }else if(
-        array[1] === array[4] &&
-        array[4] === array[7] &&
-        array[1] !== ""
-       ){
-        setWin(`${array[1]} wins the game !! `);
-       }else if(
-        array[2] === array[5] &&
-        array[5] === array[8] &&
-        array[2] !== ""
-       ){
-        setWin(`${array[2]} wins the game !! `);
-       }else if(
-        array[0] === array[4] &&
-        array[4] === array[8] &&
-        array[0] !== ""
-       ){
-        setWin(`${array[0]} wins the game !! `);
-       }else if(
-        array[2] === array[4] &&
-        array[4] === array[6] &&
-        array[2] !== ""
-       ){
-        setWin(`${array[2]} wins the game !! `);
-       }
-  }
+  const checkWin = (crossTurn) => {
+    let data = crossTurn ? "cross" : "circle";
+    console.log(data);
+    let win = winningCombinations.find((item) => {
+      return item.every((i) => array[i] === data);
+    });
+    if (win) {
+      setWin(`${data} wins the game !! `);
+    }
+  };
 
-  const createCard =(arrayIndex) =>(
-    <Card input={arrayIndex}/>
-  )
+  const createCard = (arrayIndex) => <Card input={arrayIndex} />;
 
-  const filledMessage = () =>{
-    if(filled){
+  const filledMessage = () => {
+    if (filled) {
       return (
         <div className="text-center border border-warning mb-3">
           <h2>Already filled, Try another place!!</h2>
         </div>
-      )
+      );
     }
-  }
-  const winMessage = () =>{
-    if(win){
+  };
+  const winMessage = () => {
+    if (win) {
       return (
         <div className="border border-success mb-3 text-center">
           <h2>{win}</h2>
         </div>
-      )
+      );
     }
-  }
+  };
 
   return (
     <div className=" container">
@@ -128,16 +87,26 @@ function App() {
       {winMessage()}
       <div className="d-flex justify-content-center">
         <div className="row col-6">
-          {items.map((item,index)=>{
+          {items.map((item, index) => {
             return (
-              <div className="col-4 border border-warning shadow p-0" aria-disabled={win} onClick={()=>changeItem(index)} key={index} >
+              <div
+                className="col-4 border border-warning shadow p-0"
+                aria-disabled={win}
+                onClick={() => changeItem(index)}
+                key={index}
+              >
                 {createCard(array[index])}
               </div>
-            )
-          })} 
+            );
+          })}
         </div>
       </div>
-      <button className="btn btn-success d-flex justify-content-center" onClick={resetGame}>Reset Game</button>
+      <button
+        className="btn btn-success d-flex justify-content-center"
+        onClick={resetGame}
+      >
+        Reset Game
+      </button>
     </div>
   );
 }
